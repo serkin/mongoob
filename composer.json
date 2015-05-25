@@ -1,0 +1,30 @@
+{
+    "name": "serkin/mongoob",
+    "type": "library",
+    "description": "MongoDB Objects",
+    "keywords": ["mongodb"],
+    "homepage": "https://github.com/serkin/mongoob",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Serkin Alexander",
+            "email": "serkin.alexander@gmail.com",
+            "homepage": "http://linkedin.com/in/SerkinAlexander",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "ext-mongo": ">=1.5",
+        "serkin/volan": "~1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.6.*"
+   },
+
+    "autoload": {
+        "psr-4": {
+            "Mobac\\": "src/"
+        }
+    }
+}
