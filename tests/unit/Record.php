@@ -17,6 +17,11 @@ class Mobac_Record extends PHPUnit_Framework_TestCase
     {
         (new Collection\TestCollection())->getDB()->drop();
     }
+    
+    public function testErrorOnInsertionWithoutRequiredFields()
+    {
+        return true;
+    }
 
 
     public static function tearDownAfterClass()
