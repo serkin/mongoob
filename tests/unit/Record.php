@@ -1,15 +1,15 @@
 <?php
 
-use Mobac\Collection;
+use Mongoob\Collection;
 
 /**
  * Test on behalf of vendor collection.
  */
-class Mobac_Record extends PHPUnit_Framework_TestCase
+class Mongoob_Record extends PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
-        \Mobac\Config::setParam(['db_name' => $GLOBALS['db_name']]);
+        \Mongoob\Config::setParam(['db_name' => $GLOBALS['db_name']]);
 
     }
 
@@ -26,6 +26,6 @@ class Mobac_Record extends PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        //(new \Mobac\Collection\Vendor)->getDB()->drop();
+        return true;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobac\Record;
+namespace Mongoob\Record;
 
 class TestRecord extends AbstractRecord
 {
