@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobac\Collection;
+namespace Mongoob\Collection;
 
 /**
  * Basic class for all collections.
@@ -9,8 +9,8 @@ namespace Mobac\Collection;
  */
 abstract class AbstractCollection
 {
-    use \Mobac\Traits\ErrorHandlerTrait;
-    use \Mobac\Traits\DBConnectionTrait;
+    use \Mongoob\Traits\ErrorHandlerTrait;
+    use \Mongoob\Traits\DBConnectionTrait;
 
     const ERROR_DUPLICATE_RECORD                = 1;
     const ERROR_CANNOT_INSERT_RECORD            = 2;   
