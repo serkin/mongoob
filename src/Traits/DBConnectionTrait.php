@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobac\Traits;
+namespace Mongoob\Traits;
 
 trait DBConnectionTrait
 {
@@ -11,6 +11,6 @@ trait DBConnectionTrait
      */
     public function getDB()
     {
-        return \Mobac\Connection::getInstance();
+        return \Mongoob\Connection::getInstance();
     }
 }

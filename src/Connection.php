@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobac;
+namespace Mongoob;
 
 class Connection
 {

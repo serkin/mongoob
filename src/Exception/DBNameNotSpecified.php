@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobac\Exception;
+namespace Mongoob\Exception;
 
 class DBNameNotSpecified extends Exception
 {

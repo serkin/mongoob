@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobac\Traits;
+namespace Mongoob\Traits;
 
 trait ErrorHandlerTrait
 {

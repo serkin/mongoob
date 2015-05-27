@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobac\Record;
+namespace Mongoob\Record;
 
 /**
  * Basic class for all records.
@@ -9,8 +9,8 @@ namespace Mobac\Record;
  */
 abstract class AbstractRecord extends \ArrayObject
 {
-    use \Mobac\Traits\ErrorHandlerTrait;
-    use \Mobac\Traits\DBConnectionTrait;
+    use \Mongoob\Traits\ErrorHandlerTrait;
+    use \Mongoob\Traits\DBConnectionTrait;
 
     /**
      * Deletes record from collection.

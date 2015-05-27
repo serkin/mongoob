@@ -1,6 +1,6 @@
 <?php
 
-use Mobac\Collection;
+use Mongoob\Collection;
 
 require dirname(__DIR__) . '/mocks/TestCollection.php';
 require dirname(__DIR__) . '/mocks/TestRecord.php';
@@ -8,14 +8,14 @@ require dirname(__DIR__) . '/mocks/TestRecord.php';
 /**
  * Test on behalf of product collection.
  */
-class Mobac_Collection extends PHPUnit_Framework_TestCase
+class Mongoob_Collection extends PHPUnit_Framework_TestCase
 {
     
     public $records;
 
     public static function setUpBeforeClass()
     {
-        \Mobac\Config::setParam(['db_name' => $GLOBALS['db_name']]);
+        \Mongoob\Config::setParam(['db_name' => $GLOBALS['db_name']]);
 
     }
     
@@ -131,6 +131,6 @@ class Mobac_Collection extends PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        //  (new \Mobac\Collection\Vendor)->getDB()->drop();
+        return true;
     }
 }

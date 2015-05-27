@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobac\Collection;
+namespace Mongoob\Collection;
 
 class TestCollection extends AbstractCollection
 {
@@ -11,7 +11,7 @@ class TestCollection extends AbstractCollection
 
     public function recordType()
     {
-        return "\Mobac\Record\TestRecord";
+        return "\Mongoob\Record\TestRecord";
     }
 
     public function collectionShema()
