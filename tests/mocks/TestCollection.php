@@ -18,6 +18,9 @@ class TestCollection extends AbstractCollection
     {
         return [
             'root' => [
+                '_id' => [
+                    '_type' => 'mongoid'
+                ],
                 'name' => [
                     '_type' => 'required_string'
                 ],
