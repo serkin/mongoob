@@ -2,8 +2,7 @@
 
 use Mongoob\Collection;
 
-require dirname(__DIR__) . '/mocks/TestCollection.php';
-require dirname(__DIR__) . '/mocks/TestRecord.php';
+
 
 /**
  * Test on behalf of product collection.
@@ -16,17 +15,24 @@ class Mongoob_Collection extends PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         \Mongoob\Config::setParam(['db_name' => $GLOBALS['db_name']]);
+        require dirname(__DIR__) . '/mocks/TestCollection.php';
+        require dirname(__DIR__) . '/mocks/TestRecord.php';
+        require dirname(__DIR__) . '/validators/MongoidValidator.php';
 
     }
     
     public function setUp() {
+        
+        
 
         (new Collection\TestCollection())->getDB()->drop();
 
         $record1 = [
-            'name' => 'Name 1'
+            '_id'   => new \MongoId('111111111111111111111111'),
+            'name'  => 'Name 1'
             ];
         $record2 = [
+            '_id'   => new \MongoId('111111111111111111111112'),
             'name' => 'Name 2'
             ];
 
@@ -47,6 +53,14 @@ class Mongoob_Collection extends PHPUnit_Framework_TestCase
         $this->assertFalse($result, "Product shouldn't be inserted");
         $this->assertTrue($collection->hasError());
         $this->assertEquals(Collection\AbstractCollection::ERROR_VALIDATION_FAILED, $collection->getErrorInfo()['code']);
+    }
+    
+    public function testRecordExistence()
+    {
+        $collection = new Collection\TestCollection();
+        $result = $collection->existsInCollection(new \MongoId('111111111111111111111111'));
+
+        $this->assertTrue($result);
     }
 
     public function testErrorOnInsertionArrayWithExtraKeys()
