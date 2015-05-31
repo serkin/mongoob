@@ -108,7 +108,7 @@ abstract class AbstractCollection
     {
         $this->clearError();
 
-        $isArrayValid = $this->validate($this->collectionShema(), $arr);
+        $isArrayValid = $this->validate($arr);
 
         if($isArrayValid):
 
@@ -144,7 +144,7 @@ abstract class AbstractCollection
         if($action != '$set'):  // Cause $action can be $unset this way we don't want to validate
             $isArrayValid = true;
         else:
-            $isArrayValid = $this->validate($this->collectionShema(), $arr, false);
+            $isArrayValid = $this->validate($arr, false);
         endif;
         
         if($isArrayValid):
@@ -236,15 +236,15 @@ abstract class AbstractCollection
      * Sets error if validation fails. 
      * 
      * 
-     * @param array $schema
      * @param array $arr
      * @param bool $requiredMode
      * 
      * @return bool
      */
-    private function validate($schema, $arr, $requiredMode = true)
+    private function validate($arr, $requiredMode = true)
     {
 
+        $schema = $this->collectionShema();
         $validator = new \Volan\Volan($schema);
         $validator->setRequiredMode($requiredMode);
         $result = $validator->validate($arr);
