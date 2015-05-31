@@ -9,7 +9,8 @@ php:
 matrix:
   allow_failures:
     - php: 7.0
-
+services: 
+  - mongodb
 before_script:
   - if [ "`phpenv version-name`" != "hhvm" ]; then echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
   - travis_retry composer self-update
