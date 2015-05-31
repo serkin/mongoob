@@ -141,10 +141,11 @@ abstract class AbstractCollection
     {
         $this->clearError();
 
-        if ($action != '$set'):  // Cause $action can be $unset this way we don't want to validate
-            $isArrayValid = true; else:
+        if ($action != '$set') {
+            $isArrayValid = true;
+        } else {
             $isArrayValid = $this->validate($arr, false);
-        endif;
+        }
 
         if ($isArrayValid) {
 
