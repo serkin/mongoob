@@ -10,10 +10,9 @@ class Config
     private static $params = [];
 
     /**
-     * Sets DB config params
-     * 
+     * Sets DB config params.
+     *
      * @param array $arr
-     * @return void
      */
     public static function setParam($arr)
     {
@@ -26,7 +25,6 @@ class Config
      * Unsets config param.
      *
      * @param string $key
-     * @return void
      */
     public static function unsetParam($key)
     {
