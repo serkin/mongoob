@@ -110,16 +110,17 @@ abstract class AbstractCollection
 
         $isArrayValid = $this->validate($arr);
 
-        if ($isArrayValid):
+        if ($isArrayValid) {
 
             $result = $this->getDB()->{$this->collectionName()}->insert($arr);
 
-        if (empty($result['code'])):
-                $returnValue = ['_id' => $arr['_id']]; else:
+            if (empty($result['code'])) {
+                $returnValue = ['_id' => $arr['_id']];
+            } else {
                 $this->setError(self::ERROR_CANNOT_INSERT_RECORD);
-        endif;
+            }
 
-        endif;
+        }
 
         return !empty($returnValue) ? $returnValue : false;
     }
@@ -145,15 +146,14 @@ abstract class AbstractCollection
             $isArrayValid = $this->validate($arr, false);
         endif;
 
-        if ($isArrayValid):
+        if ($isArrayValid) {
 
             $result = $this->getDB()->{$this->collectionName()}->update($query, [$action => $arr], $options);
 
-        if (!empty($result['code'])):
+            if (!empty($result['code'])) {
                 $this->setError(self::ERROR_CANNOT_INSERT_RECORD);
-        endif;
-
-        endif;
+            }
+        }
 
         return (!$this->hasError()) ? true : false;
     }
@@ -166,7 +166,7 @@ abstract class AbstractCollection
      *
      * @return \MongoCursor
      */
-    private function applyOptionsToMongoCursor(\MongoCursor &$cursor, $options = [])
+    private function applyOptionsToMongoCursor(\MongoCursor&$cursor, $options = [])
     {
         if (isset($options['limit']['limit'])):
             $cursor->limit($options['limit']['limit']);
@@ -190,19 +190,19 @@ abstract class AbstractCollection
     {
         $recordType = $this->recordType();
 
-        switch ($recordType):
+        switch ($recordType) {
             case null:
                 while ($cursor->hasNext()):
                     yield $cursor->getNext();
-        endwhile;
-        break;
+                endwhile;
+            break;
 
-        default:
+            default:
                 while ($cursor->hasNext()):
                     yield new $recordType($cursor->getNext());
-        endwhile;
-        break;
-        endswitch;
+                endwhile;
+            break;
+        }
     }
 
     /**
