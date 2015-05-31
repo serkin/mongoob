@@ -34,10 +34,8 @@ trait ErrorHandlerTrait
     /**
      * Sets error.
      *
-     * @param int $code
+     * @param int    $code
      * @param string $message
-     * 
-     * @return void
      */
     protected function setError($code, $message = '')
     {
@@ -46,8 +44,6 @@ trait ErrorHandlerTrait
 
     /**
      * Clears information about last error.
-     * 
-     * @return void
      */
     protected function clearError()
     {

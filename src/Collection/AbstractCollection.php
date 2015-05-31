@@ -13,7 +13,7 @@ abstract class AbstractCollection
     use \Mongoob\Traits\DBConnectionTrait;
 
     const ERROR_DUPLICATE_RECORD                = 1;
-    const ERROR_CANNOT_INSERT_RECORD            = 2;   
+    const ERROR_CANNOT_INSERT_RECORD            = 2;
     const ERROR_VALIDATION_FAILED               = 5;
 
     /**
@@ -110,14 +110,14 @@ abstract class AbstractCollection
 
         $isArrayValid = $this->validate($arr);
 
-        if($isArrayValid):
+        if ($isArrayValid):
 
             $result = $this->getDB()->{$this->collectionName()}->insert($arr);
 
-            if (empty($result['code'])):
+        if (empty($result['code'])):
                 $returnValue = ['_id' => $arr['_id']]; else:
                 $this->setError(self::ERROR_CANNOT_INSERT_RECORD);
-            endif;
+        endif;
 
         endif;
 
@@ -127,10 +127,10 @@ abstract class AbstractCollection
     /**
      * Updates row in collection.
      *
-     * @param array $query   Query criteria for the documents to update.
-     * @param array $arr     Replacement document
-     * @param string $action Action name. Defaut '$set' can be '$unset'
-     * @param array $options An array of options for the update operation
+     * @param array  $query   Query criteria for the documents to update.
+     * @param array  $arr     Replacement document
+     * @param string $action  Action name. Defaut '$set' can be '$unset'
+     * @param array  $options An array of options for the update operation
      *
      * @see http://www.php.net/manual/en/mongocollection.update.php
      *
@@ -138,23 +138,21 @@ abstract class AbstractCollection
      */
     public function update($query, $arr, $action = '$set', $options = [])
     {
-        
         $this->clearError();
 
-        if($action != '$set'):  // Cause $action can be $unset this way we don't want to validate
-            $isArrayValid = true;
-        else:
+        if ($action != '$set'):  // Cause $action can be $unset this way we don't want to validate
+            $isArrayValid = true; else:
             $isArrayValid = $this->validate($arr, false);
         endif;
-        
-        if($isArrayValid):
+
+        if ($isArrayValid):
 
             $result = $this->getDB()->{$this->collectionName()}->update($query, [$action => $arr], $options);
 
-            if (!empty($result['code'])):
+        if (!empty($result['code'])):
                 $this->setError(self::ERROR_CANNOT_INSERT_RECORD);
-            endif;
-            
+        endif;
+
         endif;
 
         return (!$this->hasError()) ? true : false;
@@ -187,8 +185,6 @@ abstract class AbstractCollection
 
     /**
      * Assign every retrived record with collection's recordType.
-     *
-     * @return void
      */
     private function instantiateRecordType(\MongoCursor $cursor)
     {
@@ -208,7 +204,6 @@ abstract class AbstractCollection
         break;
         endswitch;
     }
-
 
     /**
      * Checks if record exists in collection.
@@ -232,26 +227,25 @@ abstract class AbstractCollection
 
     /**
      * Validates array against schema.
-     * 
-     * Sets error if validation fails. 
-     * 
-     * 
+     *
+     * Sets error if validation fails.
+     *
+     *
      * @param array $arr
-     * @param bool $requiredMode
-     * 
+     * @param bool  $requiredMode
+     *
      * @return bool
      */
     private function validate($arr, $requiredMode = true)
     {
-
         $schema = $this->collectionShema();
         $validator = new \Volan\Volan($schema);
         $validator->setRequiredMode($requiredMode);
         $result = $validator->validate($arr);
 
-        if($result === false):
+        if ($result === false):
             $error = $validator->getErrorInfo();
-            $this->setError(self::ERROR_VALIDATION_FAILED, $error['error']);
+        $this->setError(self::ERROR_VALIDATION_FAILED, $error['error']);
         endif;
 
         return $result;
