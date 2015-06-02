@@ -9,7 +9,7 @@ use Mongoob\Collection;
  */
 class Mongoob_Collection extends PHPUnit_Framework_TestCase
 {
-    
+
     public $records;
 
     public static function setUpBeforeClass()
@@ -20,10 +20,10 @@ class Mongoob_Collection extends PHPUnit_Framework_TestCase
         require dirname(__DIR__) . '/validators/MongoidValidator.php';
 
     }
-    
+
     public function setUp() {
-        
-        
+
+
 
         (new Collection\TestCollection())->getDB()->drop();
 
@@ -54,7 +54,7 @@ class Mongoob_Collection extends PHPUnit_Framework_TestCase
         $this->assertTrue($collection->hasError());
         $this->assertEquals(Collection\AbstractCollection::ERROR_VALIDATION_FAILED, $collection->getErrorInfo()['code']);
     }
-    
+
     public function testRecordExistence()
     {
         $collection = new Collection\TestCollection();

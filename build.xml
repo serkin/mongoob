@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?> 
+<?xml version="1.0" encoding="utf-8" ?>
 <project name="foo" default="build" basedir=".">
 
 <target name="clean">
@@ -20,7 +20,7 @@
     </exec>
 </target>
 
-<!-- Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel 
+<!-- Run the pdepend, phpmd, phpcpd, phpcs, phpdoc and phploc tasks in parallel
     using a maximum of 2 threads. -->
 <target name="parallelTasks">
     <parallel threadCount="1">
@@ -108,4 +108,4 @@
 
 
 <target name="build" depends="clean,parallelTasks,phpunit" />
-</project> 
+</project>
