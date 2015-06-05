@@ -17,31 +17,53 @@ class MongoobCollection extends PHPUnit_Framework_TestCase
         \Mongoob\Config::setParam(['db_name' => $GLOBALS['db_name']]);
         require dirname(__DIR__) . '/mocks/TestCollection.php';
         require dirname(__DIR__) . '/mocks/TestRecord.php';
+
+        require dirname(__DIR__) . '/mocks/TestCollection2.php';
+        require dirname(__DIR__) . '/mocks/TestRecord2.php';
         require dirname(__DIR__) . '/validators/MongoidValidator.php';
 
     }
 
     public function setUp() {
 
-
-
         (new Collection\TestCollection())->getDB()->drop();
+
+        //  Collection\TestCollection();
 
         $record1 = [
             '_id'   => new \MongoId('111111111111111111111111'),
             'name'  => 'Name 1'
-            ];
+        ];
         $record2 = [
             '_id'   => new \MongoId('111111111111111111111112'),
             'name' => 'Name 2'
-            ];
+        ];
 
         $collection = new Collection\TestCollection();
 
         $collection->insert($record1);
         $collection->insert($record2);
 
+
+        //  Collection\TestCollection2();
+
+        $record1 = [
+            '_id'   => new \MongoId('111111111111111111111111'),
+            'name'  => 'Name 1'
+        ];
+        $record2 = [
+            '_id'   => new \MongoId('111111111111111111111112'),
+            'name' => 'Name 2'
+        ];
+
+        $collection = new Collection\TestCollection2();
+
+        $collection->insert($record1);
+        $collection->insert($record2);
+
     }
+
+
 
     public function testErrorOnInsertionWithoutRequiredFields()
     {
@@ -53,14 +75,6 @@ class MongoobCollection extends PHPUnit_Framework_TestCase
         $this->assertFalse($result, "Product shouldn't be inserted");
         $this->assertTrue($collection->hasError());
         $this->assertEquals(Collection\AbstractCollection::ERROR_VALIDATION_FAILED, $collection->getErrorInfo()['code']);
-    }
-
-    public function testRecordExistence()
-    {
-        $collection = new Collection\TestCollection();
-        $result = $collection->existsInCollection(new \MongoId('111111111111111111111111'));
-
-        $this->assertTrue($result);
     }
 
     public function testErrorOnInsertionArrayWithExtraKeys()
@@ -78,29 +92,42 @@ class MongoobCollection extends PHPUnit_Framework_TestCase
         $this->assertEquals(Collection\AbstractCollection::ERROR_VALIDATION_FAILED, $collection->getErrorInfo()['code']);
     }
 
+
     public function testInsertingRecords()
     {
 
-        $record1 = [
-            'name' => 'Name 3'
-            ];
-        $record2 = [
-            'name' => 'Name 4'
-            ];
+        $record = [
+            '_id'   => new \MongoId('111111111111111111111113'),
+            'name'  => 'Name 3'
+        ];
+
 
         $collection = new Collection\TestCollection();
 
-        $collection->insert($record1);
-        $collection->insert($record2);
-
+        $collection->insert($record);
         $expected = (new Collection\TestCollection())->countByAttributes([]);
 
-        $this->assertEquals($expected, 4, 'There should be 4 records but '.$expected.' records retrived');
+        $this->assertEquals($expected, 3, 'There should be 2 records but '.$expected.' records retrived');
     }
 
-    /**
-     * @depends testInsertingRecords
-     */
+
+    public function testRecordClassTypeCompliance()
+    {
+        $elements = iterator_to_array((new Collection\TestCollection())->findAllByAttributes());
+        $elements2 = iterator_to_array((new Collection\TestCollection2())->findAllByAttributes());
+
+        $this->assertInstanceOf('\Mongoob\Record\AbstractRecord', $elements[0]);
+        $this->assertFalse($elements2[0] instanceof \Mongoob\Record\AbstractRecord);
+    }
+
+    public function testRecordExistence()
+    {
+        $collection = new Collection\TestCollection();
+        $result = $collection->existsInCollection(new \MongoId('111111111111111111111111'));
+
+        $this->assertTrue($result);
+    }
+
     public function testRetrivingMultipleRecordsWithQuery()
     {
         $elements = iterator_to_array((new Collection\TestCollection())->findAllByAttributes(['name' => 'Name 1'], ['fields' => ['name']]));
@@ -108,43 +135,49 @@ class MongoobCollection extends PHPUnit_Framework_TestCase
         $this->assertEquals($elements[0]['name'], 'Name 1', 'Retrived array dosnt correspond with given');
     }
 
-    /**
-     * @depends testInsertingRecords
-     */
-    public function testRetrivingMultipleRecords()
-    {
-        $elements = iterator_to_array((new Collection\TestCollection())->findAllByAttributes([]));
 
-        $this->assertEquals(count($elements), 2, 'There should be 2 records but '.count($elements).' records retrived');
-    }
-
-    /**
-     * @depends testInsertingRecords
-     */
     public function testRetrivingOneRecord()
     {
-        $elements = (new Collection\TestCollection())->findOneByAttributes([]);
+        $elements = (new Collection\TestCollection())->findOneByAttributes(['name' => 'Name 1']);
 
-        $this->assertTrue(!empty($elements), 'There should be only 1 record');
+        $this->assertCount(1, $elements);
     }
 
-    /**
-     * @depends testRetrivingMultipleRecordsWithQuery
-     */
     public function testUpdatingRecords()
     {
-        $vendorCollection = new Collection\TestCollection();
+        $collection = new Collection\TestCollection();
 
-        $vendor = $vendorCollection->findOneByAttributes(['name' => 'Name 1']);
-        $vendorCollection->update(['_id' => $vendor['_id']], ['name' => 'NoName']);
+        $vendor = $collection->findOneByAttributes(['name' => 'Name 1']);
+        $collection->update(['_id' => $vendor['_id']], ['name' => 'Name 3']);
 
-        $updatedVendor = $vendorCollection->findOneByAttributes(['name' => 'NoName'], ['fields' => ['name']]);
+        $expected = $collection->countByAttributes(['name' => 'Name 3']);
 
-        $this->assertEquals($updatedVendor['name'], 'NoName', "New field <name.en = Mokita> wasn't set");
+        $this->assertEquals(1, $expected);
     }
 
-    public static function tearDownAfterClass()
+    public function testApplyingFilter()
     {
-        return true;
+
+        $record = [
+            '_id'   => new \MongoId('111111111111111111111113'),
+            'name' => 'Name 3'
+        ];
+
+        $collection = new Collection\TestCollection();
+        $collection->insert($record);
+
+        $records = iterator_to_array($collection->findAllByAttributes(
+            [],
+            [
+                'fields'    => ['name'],
+                'limit'     => ['limit' => 1, 'offset' => 1],
+                'sort'      => ['name' => -1]
+            ])
+        );
+
+        $this->assertCount(1, $records);
+        $this->assertEquals($records[0]['name'], 'Name 2');
+
     }
+
 }
