@@ -3,16 +3,11 @@
 namespace Mongoob\Collection;
 use Mongoob\Record;
 
-class TestCollection extends AbstractCollection
+class TestCollection2 extends AbstractCollection
 {
     public function collectionName()
     {
-        return 'test';
-    }
-
-    public function recordClass()
-    {
-        return new Record\TestRecord([]);
+        return 'test2';
     }
 
     public function collectionSchema()
