@@ -12,16 +12,19 @@ abstract class AbstractCollection
     use \Mongoob\Traits\ErrorHandlerTrait;
     use \Mongoob\Traits\DBConnectionTrait;
 
-    const ERROR_DUPLICATE_RECORD                = 1;
-    const ERROR_CANNOT_INSERT_RECORD            = 2;
-    const ERROR_VALIDATION_FAILED               = 5;
+    const ERROR_DUPLICATE_RECORD = 1;
+    const ERROR_CANNOT_INSERT_RECORD = 2;
+    const ERROR_VALIDATION_FAILED = 5;
 
     /**
-     * Gets the class which should be used for every retrived record.
+     * Gets record type
      *
-     * @return string
+     * @return \Mongoob\Record\AbstractRecord|null If null we get array from db
      */
-    abstract public function recordType();
+    public function recordType()
+    {
+        return null;
+    }
 
     /**
      * Get associated collection name.
@@ -111,7 +114,6 @@ abstract class AbstractCollection
         $isArrayValid = $this->validate($arr);
 
         if ($isArrayValid) {
-
             $result = $this->getDB()->{$this->collectionName()}->insert($arr);
 
             if (empty($result['code'])) {
@@ -119,7 +121,6 @@ abstract class AbstractCollection
             } else {
                 $this->setError(self::ERROR_CANNOT_INSERT_RECORD);
             }
-
         }
 
         return !empty($returnValue) ? $returnValue : false;
@@ -148,7 +149,6 @@ abstract class AbstractCollection
         }
 
         if ($isArrayValid) {
-
             $result = $this->getDB()->{$this->collectionName()}->update($query, [$action => $arr], $options);
 
             if (!empty($result['code'])) {
@@ -186,12 +186,14 @@ abstract class AbstractCollection
 
     /**
      * Assign every retrived record with collection's recordType.
+     *
+     * @param \MongoCursor $cursor
      */
     private function instantiateRecordType(\MongoCursor $cursor)
     {
-        $recordType = $this->recordType();
+        $recordClass = $this->recordType();
 
-        switch ($recordType) {
+        switch ($recordClass) {
             case null:
                 while ($cursor->hasNext()):
                     yield $cursor->getNext();
@@ -200,7 +202,8 @@ abstract class AbstractCollection
 
             default:
                 while ($cursor->hasNext()):
-                    yield new $recordType($cursor->getNext());
+                    $recordClass->exchangeArray($cursor->getNext());
+                    yield $recordClass;
                 endwhile;
             break;
         }
@@ -244,10 +247,10 @@ abstract class AbstractCollection
         $validator->setRequiredMode($requiredMode);
         $result = $validator->validate($arr);
 
-        if ($result === false):
+        if ($result === false) {
             $error = $validator->getErrorInfo();
-        $this->setError(self::ERROR_VALIDATION_FAILED, $error['error']);
-        endif;
+            $this->setError(self::ERROR_VALIDATION_FAILED, $error['error']);
+        }
 
         return $result;
     }

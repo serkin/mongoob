@@ -1,6 +1,7 @@
 <?php
 
 namespace Mongoob\Collection;
+use Mongoob\Record;
 
 class TestCollection extends AbstractCollection
 {
@@ -11,7 +12,7 @@ class TestCollection extends AbstractCollection
 
     public function recordType()
     {
-        return "\Mongoob\Record\TestRecord";
+        return new Record\TestRecord([]);
     }
 
     public function collectionShema()
