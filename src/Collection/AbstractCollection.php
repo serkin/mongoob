@@ -21,7 +21,7 @@ abstract class AbstractCollection
      *
      * @return \Mongoob\Record\AbstractRecord|null If null we get array from db
      */
-    public function recordType()
+    public function recordClass()
     {
         return null;
     }
@@ -38,7 +38,7 @@ abstract class AbstractCollection
      *
      * @return array
      */
-    abstract public function collectionShema();
+    abstract public function collectionSchema();
 
     /**
      * Return records from collection according given conditions.
@@ -58,7 +58,7 @@ abstract class AbstractCollection
 
         $this->applyOptionsToMongoCursor($cursor, $options);
 
-        return $this->instantiateRecordType($cursor);
+        return $this->instantiateRecordClass($cursor);
     }
 
     /**
@@ -185,13 +185,13 @@ abstract class AbstractCollection
     }
 
     /**
-     * Assign every retrived record with collection's recordType.
+     * Assign every retrived record with collection's recordClass.
      *
      * @param \MongoCursor $cursor
      */
-    private function instantiateRecordType(\MongoCursor $cursor)
+    private function instantiateRecordClass(\MongoCursor $cursor)
     {
-        $recordClass = $this->recordType();
+        $recordClass = $this->recordClass();
 
         switch ($recordClass) {
             case null:
@@ -242,7 +242,7 @@ abstract class AbstractCollection
      */
     private function validate($arr, $requiredMode = true)
     {
-        $schema = $this->collectionShema();
+        $schema = $this->collectionSchema();
         $validator = new \Volan\Volan($schema);
         $validator->setRequiredMode($requiredMode);
         $result = $validator->validate($arr);

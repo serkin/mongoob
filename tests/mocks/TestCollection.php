@@ -10,12 +10,12 @@ class TestCollection extends AbstractCollection
         return 'test';
     }
 
-    public function recordType()
+    public function recordClass()
     {
         return new Record\TestRecord([]);
     }
 
-    public function collectionShema()
+    public function collectionSchema()
     {
         return [
             'root' => [
