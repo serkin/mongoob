@@ -7,7 +7,7 @@ use Mongoob\Collection;
 /**
  * Test on behalf of product collection.
  */
-class Mongoob_Collection extends PHPUnit_Framework_TestCase
+class MongoobCollection extends PHPUnit_Framework_TestCase
 {
 
     public $records;
