@@ -160,6 +160,18 @@ abstract class AbstractCollection
     }
 
     /**
+     * Checks if record exists in collection.
+     *
+     * @param \MongoId $idRecord
+     *
+     * @return bool
+     */
+    public function existsInCollection(\MongoId $idRecord)
+    {
+        return  (bool)$this->findOneByAttributes(['_id' => $idRecord]);
+    }
+
+    /**
      * Applies options to cursor.
      *
      * @param \MongoCursor $cursor
@@ -209,25 +221,7 @@ abstract class AbstractCollection
         }
     }
 
-    /**
-     * Checks if record exists in collection.
-     *
-     * @param \MongoId $idRecord
-     *
-     * @return bool
-     */
-    public function existsInCollection(\MongoId $idRecord)
-    {
-        $returnValue = false;
 
-        $record = $this->findOneByAttributes(['_id' => $idRecord]);
-
-        if (isset($record['_id'])):
-            $returnValue = true;
-        endif;
-
-        return $returnValue;
-    }
 
     /**
      * Validates array against schema.
