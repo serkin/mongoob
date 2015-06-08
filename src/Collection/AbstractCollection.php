@@ -19,7 +19,7 @@ abstract class AbstractCollection
     /**
      * Gets record type
      *
-     * @return \Mongoob\Record\AbstractRecord|null If null we get array from db
+     * @return string|null
      */
     public function recordClass()
     {
@@ -214,8 +214,7 @@ abstract class AbstractCollection
 
             default:
                 while ($cursor->hasNext()):
-                    $recordClass->exchangeArray($cursor->getNext());
-                    yield $recordClass;
+                    yield new $recordClass($cursor->getNext());
                 endwhile;
             break;
         }
