@@ -17,6 +17,13 @@ abstract class AbstractCollection
     const ERROR_VALIDATION_FAILED = 5;
 
     /**
+     * Key whether validation needed
+     *
+     * @var bool
+     */
+    protected $validationNeeded = true;
+
+    /**
      * Gets record type
      *
      * @return string|null
@@ -24,6 +31,18 @@ abstract class AbstractCollection
     public function recordClass()
     {
         return null;
+    }
+
+    /**
+     * Sets validation mode
+     *
+     * @param bool $mode
+     *
+     * @return void
+     */
+    public function validationNeeded($mode = true)
+    {
+        $this->validationNeeded = $mode;
     }
 
     /**
@@ -111,7 +130,12 @@ abstract class AbstractCollection
     {
         $this->clearError();
 
-        $isArrayValid = $this->validate($arr);
+
+        if ($this->validationNeeded === false) {
+            $isArrayValid = true;
+        } else {
+            $isArrayValid = $this->validate($arr);
+        }
 
         if ($isArrayValid) {
             $result = $this->getDB()->{$this->collectionName()}->insert($arr);
@@ -142,7 +166,7 @@ abstract class AbstractCollection
     {
         $this->clearError();
 
-        if ($action != '$set') {
+        if ($this->validationNeeded === false) {
             $isArrayValid = true;
         } else {
             $isArrayValid = $this->validate($arr, false);
