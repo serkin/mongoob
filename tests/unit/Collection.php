@@ -90,6 +90,13 @@ class MongoobCollection extends PHPUnit_Framework_TestCase
         $this->assertFalse($result, "Product shouldn't be inserted");
         $this->assertTrue($collection->hasError());
         $this->assertEquals(Collection\AbstractCollection::ERROR_VALIDATION_FAILED, $collection->getErrorInfo()['code']);
+
+        $collection->validationNeeded(false);
+        $collection->insert($record);
+        $this->assertFalse($collection->hasError());
+
+
+
     }
 
 
