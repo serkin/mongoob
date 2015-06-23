@@ -176,7 +176,7 @@ abstract class AbstractCollection
             $result = $this->getDB()->{$this->collectionName()}->update($query, [$action => $arr], $options);
 
             if (!empty($result['code'])) {
-                $this->setError(self::ERROR_CANNOT_INSERT_RECORD);
+                $this->setError(self::ERROR_CANNOT_INSERT_RECORD, 'Internal error');
             }
         }
 
