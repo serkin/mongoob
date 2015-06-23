@@ -12,6 +12,8 @@ abstract class AbstractRecord extends \ArrayObject
     use \Mongoob\Traits\ErrorHandlerTrait;
     use \Mongoob\Traits\DBConnectionTrait;
 
+    const ERROR_CANNOT_DELETE_RECORD = 6;
+
     /**
      * Deletes record from collection.
      *
