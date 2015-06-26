@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.5",
         "ext-mongo": ">=1.5",
-        "serkin/volan": "~1.1"
+        "serkin/volan": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "4.6.*"
